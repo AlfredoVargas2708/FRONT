@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LegoService {
-  private apiUrl = 'http://localhost:3000/lego'; // Replace with your actual API URL
+  private apiUrl = 'https://back-anlk.onrender.com/lego'; // Replace with your actual API URL
 
   constructor(private http: HttpClient) { }
 
