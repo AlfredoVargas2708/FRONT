@@ -6,15 +6,20 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LegoService {
-  private apiUrl = 'https://back-anlk.onrender.com/lego'; // Replace with your actual API URL
+  private apiUrlCloud = 'https://back-anlk.onrender.com/lego'; // Replace with your actual API URL
+  private apiUrl = 'http://localhost:3000/lego'; // Local API URL for development
 
   constructor(private http: HttpClient) { }
 
   getLegoPieces(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+    return this.http.get<any>(this.apiUrlCloud);
   }
 
   getLegoPieceByCode(code: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${code}`);
+    return this.http.get<any>(`${this.apiUrlCloud}/${code}`);
+  }
+
+  editLegoPiece(id: number, legoPiece: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrlCloud}/${id}`, legoPiece);
   }
 }

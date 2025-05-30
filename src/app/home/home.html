@@ -14,6 +14,7 @@
                     <th>Task</th>
                     <th>Pedido</th>
                     <th>Completo</th>
+                    <th>Reemplazado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -25,6 +26,7 @@
                     <td>{{ item.task }}</td>
                     <td>{{ item.pedido }}</td>
                     <td>{{ item.completo }}</td>
+                    <td>{{ item.reemplazado }}</td>
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#exampleModal" (click)="editLegoPiece(i)">
@@ -44,11 +46,49 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <form [formGroup]="editLegoPieceForm">
+                        <div class="mb-3">
+                            <label for="code" class="form-label">Código</label>
+                            <input type="text" class="form-control" id="code" formControlName="code" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="lego" class="form-label">Lego</label>
+                            <input type="text" class="form-control" id="lego" formControlName="lego" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="set" class="form-label">Set</label>
+                            <input type="text" class="form-control" id="set" formControlName="set" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="task" class="form-label">Task</label>
+                            <input type="text" class="form-control" id="task" formControlName="task" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="pedido" class="form-label">Pedido</label>
+                            <select formControlName="pedido">
+                                <option value="Sí">Sí</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="completo" class="form-label">Completo</label>
+                            <select formControlName="completo">
+                                <option value="Sí">Sí</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="reemplazado" class="form-label">Reemplazado</label>
+                            <select formControlName="reemplazado">
+                                <option value="Sí">Sí</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="updateLegoPiece()">Save changes</button>
                 </div>
             </div>
         </div>
