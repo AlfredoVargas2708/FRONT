@@ -8,6 +8,7 @@
         <table *ngIf="isTableVisible && !isUpdating">
             <thead>
                 <tr>
+                    <th>Imagen</th>
                     <th>Code</th>
                     <th>Lego</th>
                     <th>Set</th>
@@ -20,6 +21,9 @@
             </thead>
             <tbody>
                 <tr *ngFor="let item of legoPieces, let i = index">
+                    <td class="image-cell">
+                        <img src="https://www.lego.com/cdn/product-assets/element.img.photoreal.192x192/{{ item.code }}.jpg" alt="">
+                    </td>
                     <td>{{ item.code }}</td>
                     <td>{{ item.lego }}</td>
                     <td>{{ item.set }}</td>
