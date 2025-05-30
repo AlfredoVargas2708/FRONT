@@ -28,6 +28,7 @@ export class Home {
       set: [''],
       task: [''],
       pedido: [''],
+      cantidad: [null],
       completo: [''],
       reemplazado: [''],
     });

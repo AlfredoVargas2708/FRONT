@@ -33,6 +33,7 @@
                             </div>
                         </div>
                     </th>
+                    <th>Cantidad</th>
                     <th>Pedido</th>
                     <th>Completo</th>
                     <th>Reemplazado</th>
@@ -49,6 +50,7 @@
                     <td>{{ item.lego }}</td>
                     <td>{{ item.set }}</td>
                     <td>{{ item.task }}</td>
+                    <td>{{ item.cant }}</td>
                     <td>{{ item.pedido }}</td>
                     <td>{{ item.completo }}</td>
                     <td>{{ item.reemplazado }}</td>
@@ -88,6 +90,10 @@
                         <div class="mb-3">
                             <label for="task" class="form-label">Task</label>
                             <input type="text" class="form-control" id="task" formControlName="task" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="cantidad" class="form-label">Cantidad</label>
+                            <input type="number" class="form-control" id="cantidad" formControlName="cantidad" />
                         </div>
                         <div class="mb-3">
                             <label for="pedido" class="form-label">Pedido</label>
