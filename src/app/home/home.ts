@@ -12,6 +12,8 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 export class Home {
   legoPieces: any[] = [];
   originalLegoPieces: any[] = [];
+  currentTaskFilter: string = '';
+  currentLegoFilter: string = '';
   isTableVisible: boolean = false;
   editLegoPieceForm: FormGroup;
   isUpdating: boolean = false;
@@ -125,35 +127,35 @@ export class Home {
     this.isOpenSearchLego = !this.isOpenSearchLego;
   }
 
+  // Modifica tus funciones de filtrado
   searchTaskInput(event: any) {
     const inputElement = event.target as HTMLInputElement;
-    const task = inputElement.value.trim().toLowerCase(); // Convertir a minúsculas
-
-    if (!task) {
-      // Si el input está vacío, mostrar todos los elementos
-      this.legoPieces = [...this.originalLegoPieces];
-      return;
-    }
-
-    // Filtrar y asignar el resultado
-    this.legoPieces = this.originalLegoPieces.filter(piece =>
-      piece.task?.toLowerCase().includes(task)
-    );
+    this.currentTaskFilter = inputElement.value.trim().toLowerCase();
+    this.applyFilters();
   }
 
   searchLegoInput(event: any) {
     const inputElement = event.target as HTMLInputElement;
-    const lego = inputElement.value.trim().toLowerCase(); // Convertir a minúsculas
+    this.currentLegoFilter = inputElement.value.trim().toLowerCase();
+    this.applyFilters();
+  }
 
-    if (!lego) {
-      // Si el input está vacío, mostrar todos los elementos
-      this.legoPieces = [...this.originalLegoPieces];
-      return;
+  // Nueva función que aplica todos los filtros
+  private applyFilters() {
+    this.legoPieces = [...this.originalLegoPieces];
+
+    // Aplicar filtro por task si existe
+    if (this.currentTaskFilter) {
+      this.legoPieces = this.legoPieces.filter(piece =>
+        piece.task?.toLowerCase().includes(this.currentTaskFilter)
+      );
     }
 
-    // Filtrar y asignar el resultado
-    this.legoPieces = this.originalLegoPieces.filter(piece =>
-      piece.lego?.toLowerCase().includes(lego)
-    );
+    // Aplicar filtro por lego si existe
+    if (this.currentLegoFilter) {
+      this.legoPieces = this.legoPieces.filter(piece =>
+        piece.lego?.toLowerCase().includes(this.currentLegoFilter)
+      );
+    }
   }
 }
