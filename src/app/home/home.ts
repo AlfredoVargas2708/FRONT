@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { LegoService } from '../services/lego.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
@@ -13,8 +13,9 @@ export class Home {
   legoPieces: any[] = [];
   isTableVisible: boolean = false;
   editLegoPieceForm: FormGroup;
+  isUpdating: boolean = false;
 
-  constructor(private legoService: LegoService, private fb: FormBuilder) {
+  constructor(private legoService: LegoService, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.editLegoPieceForm = this.fb.group({
       id: [''],
       code: [''],
@@ -27,8 +28,7 @@ export class Home {
     });
   }
 
-  searchLegoPiece(event: Event) {
-    event.preventDefault(); // Prevent default form submission behavior
+  searchLegoPiece(event: any) {
     const inputElement = event.target as HTMLInputElement;
     const code = inputElement.value.trim(); // Get the value from the input element
     if (!code) {
@@ -70,15 +70,45 @@ export class Home {
 
   updateLegoPiece() {
     const updatedLegoPiece = this.editLegoPieceForm.value;
-    console.log('Updating Lego piece with ID:', updatedLegoPiece.id, 'and values:', updatedLegoPiece);
+    this.isUpdating = true;
+    this.isTableVisible = false; // Hide the table while updating
 
     this.legoService.editLegoPiece(updatedLegoPiece.id, updatedLegoPiece).subscribe({
       next: (response) => {
         console.log('Lego piece updated successfully:', response);
-        // Optionally, refresh the list or show a success message
+
+        // Opción 1: Actualizar el elemento específico en el array
+        const index = this.legoPieces.findIndex(p => p.id === updatedLegoPiece.id);
+        if (index !== -1) {
+          this.legoPieces[index] = {
+            ...updatedLegoPiece,
+            pedido: updatedLegoPiece.pedido === 'Sí' ? 'Sí' : 'No',
+            completo: updatedLegoPiece.completo === 'Sí' ? 'Sí' : 'No',
+            reemplazado: updatedLegoPiece.reemplazado === 'Sí' ? 'Sí' : 'No'
+          };
+
+          // Forzar la actualización de la vista
+          this.legoPieces = [...this.legoPieces];
+        }
+
+        // Opción 2: Recargar los datos desde el servidor (más seguro)
+        // this.legoService.getLegoPieceByCode(updatedLegoPiece.code).subscribe(data => {
+        //   this.legoPieces = data.map((piece: any) => ({
+        //     ...piece,
+        //     pedido: piece.pedido ? 'Sí' : 'No',
+        //     completo: piece.completo ? 'Sí' : 'No',
+        //     reemplazado: piece.reemplazado ? 'Sí' : 'No'
+        //   }));
+        // });
+
+        this.editLegoPieceForm.reset();
+        this.isUpdating = false;
+        this.isTableVisible = true; // Show the table again after updating
+        this.cdr.detectChanges(); // Forzar detección de cambios
       },
       error: (error) => {
         console.error('Error updating Lego piece:', error);
+        this.isUpdating = false;
       }
     });
   }
