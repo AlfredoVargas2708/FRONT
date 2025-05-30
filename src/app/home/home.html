@@ -5,7 +5,7 @@
         <button class="btn btn-primary" (click)="viewTable()">Buscar</button>
     </div>
     <div class="lego-table">
-        <table *ngIf="isTableVisible || !isUpdating">
+        <table *ngIf="isTableVisible && !isUpdating">
             <thead>
                 <tr>
                     <th>Code</th>
@@ -36,7 +36,7 @@
                 </tr>
             </tbody>
         </table>
-        <div class="loader" *ngIf="isUpdating"></div>
+        <div class="loader" *ngIf="isUpdating && !isTableVisible"></div>
     </div>
     <!-- Editar Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

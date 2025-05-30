@@ -73,7 +73,7 @@ export class Home {
     this.isUpdating = true;
     this.isTableVisible = false; // Hide the table while updating
 
-    this.legoService.editLegoPiece(updatedLegoPiece.id, updatedLegoPiece).subscribe({
+    this.legoService.editLegoPieceInBBDD(updatedLegoPiece.id, updatedLegoPiece).subscribe({
       next: (response) => {
         console.log('Lego piece updated successfully:', response);
 

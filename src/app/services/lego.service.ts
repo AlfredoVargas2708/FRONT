@@ -19,7 +19,7 @@ export class LegoService {
     return this.http.get<any>(`${this.apiUrlCloud}/${code}`);
   }
 
-  editLegoPiece(id: number, legoPiece: any): Observable<any> {
+  editLegoPieceInBBDD(id: number, legoPiece: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrlCloud}/${id}`, legoPiece);
   }
 }
