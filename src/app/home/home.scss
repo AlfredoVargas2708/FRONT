@@ -37,6 +37,52 @@
             left: 0;
         }
     }
+
+    .task-header, .lego-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        img {
+            width: 25px;
+            height: 25px;
+        }
+
+        .search-task, .search-lego{
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            input {
+                transition: all 0.3s ease;
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                margin-left: 8px;
+
+                &.hidden {
+                    width: 0;
+                    opacity: 0;
+                    visibility: hidden;
+                    padding: 5px 0;
+                    border: none;
+                }
+
+                &.visible {
+                    width: 80px;
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+
+            img {
+                cursor: pointer;
+                width: 24px;
+                height: 24px;
+            }
+        }
+    }
 }
 
 .mb-3 {
@@ -49,6 +95,13 @@ form {
     display: grid;
     grid-template-columns: 200px 200px;
     gap: 0 20px;
+}
+
+p,
+h1,
+h2,
+h3 {
+    margin: 0;
 }
 
 /* HTML: <div class="loader"></div> */

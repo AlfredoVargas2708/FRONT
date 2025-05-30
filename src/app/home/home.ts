@@ -11,9 +11,12 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class Home {
   legoPieces: any[] = [];
+  originalLegoPieces: any[] = [];
   isTableVisible: boolean = false;
   editLegoPieceForm: FormGroup;
   isUpdating: boolean = false;
+  isOpenSearchTask: boolean = false;
+  isOpenSearchLego: boolean = false;
 
   constructor(private legoService: LegoService, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.editLegoPieceForm = this.fb.group({
@@ -45,6 +48,7 @@ export class Home {
             completo: piece.completo !== '' ? 'Sí' : 'No',
             reemplazado: piece.reemplazado !== '' ? 'Sí' : 'No'
           }));
+          this.originalLegoPieces = [...this.legoPieces]; // Store the original data
           console.log('Lego pieces after processing:', this.legoPieces);
         } else {
           console.warn('No Lego piece found for code:', code);
@@ -111,5 +115,45 @@ export class Home {
         this.isUpdating = false;
       }
     });
+  }
+
+  openSearchTask() {
+    this.isOpenSearchTask = !this.isOpenSearchTask;
+  }
+
+  openSearchLego() {
+    this.isOpenSearchLego = !this.isOpenSearchLego;
+  }
+
+  searchTaskInput(event: any) {
+    const inputElement = event.target as HTMLInputElement;
+    const task = inputElement.value.trim().toLowerCase(); // Convertir a minúsculas
+
+    if (!task) {
+      // Si el input está vacío, mostrar todos los elementos
+      this.legoPieces = [...this.originalLegoPieces];
+      return;
+    }
+
+    // Filtrar y asignar el resultado
+    this.legoPieces = this.originalLegoPieces.filter(piece =>
+      piece.task?.toLowerCase().includes(task)
+    );
+  }
+
+  searchLegoInput(event: any) {
+    const inputElement = event.target as HTMLInputElement;
+    const lego = inputElement.value.trim().toLowerCase(); // Convertir a minúsculas
+
+    if (!lego) {
+      // Si el input está vacío, mostrar todos los elementos
+      this.legoPieces = [...this.originalLegoPieces];
+      return;
+    }
+
+    // Filtrar y asignar el resultado
+    this.legoPieces = this.originalLegoPieces.filter(piece =>
+      piece.lego?.toLowerCase().includes(lego)
+    );
   }
 }

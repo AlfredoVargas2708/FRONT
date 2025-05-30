@@ -10,9 +10,29 @@
                 <tr>
                     <th>Imagen</th>
                     <th>Code</th>
-                    <th>Lego</th>
+                    <th>
+                        <div class="lego-header">
+                            <p>Lego</p>
+                            <div class="search-lego">
+                                <img src="https://img.icons8.com/ios/50/search-more.png" alt=""
+                                    (click)="openSearchLego()">
+                                <input type="number" placeholder="Buscar" [class.visible]="isOpenSearchLego"
+                                    [class.hidden]="!isOpenSearchLego" (input)="searchLegoInput($event)" />
+                            </div>
+                        </div>
+                    </th>
                     <th>Set</th>
-                    <th>Task</th>
+                    <th>
+                        <div class="task-header">
+                            <p>Task</p>
+                            <div class="search-task">
+                                <img src="https://img.icons8.com/ios/50/search-more.png" alt=""
+                                    (click)="openSearchTask()">
+                                <input type="number" placeholder="Buscar" [class.visible]="isOpenSearchTask"
+                                    [class.hidden]="!isOpenSearchTask" (input)="searchTaskInput($event)" />
+                            </div>
+                        </div>
+                    </th>
                     <th>Pedido</th>
                     <th>Completo</th>
                     <th>Reemplazado</th>
@@ -22,7 +42,8 @@
             <tbody>
                 <tr *ngFor="let item of legoPieces, let i = index">
                     <td class="image-cell">
-                        <img src="https://www.lego.com/cdn/product-assets/element.img.photoreal.192x192/{{ item.code }}.jpg" alt="">
+                        <img src="https://www.lego.com/cdn/product-assets/element.img.photoreal.192x192/{{ item.code }}.jpg"
+                            alt="">
                     </td>
                     <td>{{ item.code }}</td>
                     <td>{{ item.lego }}</td>
@@ -93,9 +114,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="updateLegoPiece()">Save changes</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        (click)="updateLegoPiece()">Save changes</button>
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
 </div>
