@@ -1,0 +1,22 @@
+.lego-pieces {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lego-table {
+    width: 100%;
+    overflow: auto;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+    }
+}
