@@ -14,7 +14,7 @@ export class Home {
   originalLegoPieces: any[] = [];
   currentTaskFilter: string = '';
   currentLegoFilter: string = '';
-  isTableVisible: boolean = false;
+  isSearching: boolean = false;
   editLegoPieceForm: FormGroup;
   addLegoPieceForm: FormGroup;
   isUpdating: boolean = false;
@@ -52,6 +52,7 @@ export class Home {
       console.error('Search code input is empty');
       return;
     }
+    this.isSearching = true; // Set the searching flag to true
     this.legoService.getLegoPieceByCode(code).subscribe({
       next: (data) => {
         if (data) {
@@ -62,11 +63,14 @@ export class Home {
             completo: piece.completo !== '' ? 'Sí' : 'No',
           }));
           this.originalLegoPieces = [...this.legoPieces]; // Store the original data
-          console.log('Lego pieces after processing:', this.legoPieces);
         } else {
           console.warn('No Lego piece found for code:', code);
           this.legoPieces = []; // Clear the list if not found
         }
+        setTimeout(() => {
+          this.isSearching = false; // Set the searching flag to false
+          this.cdr.detectChanges(); // Ensure the view is updated
+        });
       },
       error: (error) => {
         console.error('Error fetching Lego piece:', error);
@@ -75,12 +79,7 @@ export class Home {
     })
   }
 
-  viewTable() {
-    this.isTableVisible = true;
-  }
-
   editLegoPiece(id: number) {
-    console.log('Edit Lego piece:', this.legoPieces[id]);
     this.editLegoPieceForm.patchValue(this.legoPieces[id]);
     console.log('Form values after patch:', this.editLegoPieceForm.value);
   }
@@ -106,11 +105,17 @@ export class Home {
         }
 
         this.editLegoPieceForm.reset();
-        this.isUpdating = false;
+        setTimeout(() => {
+          this.isUpdating = false; // Reset the updating flag
+          this.cdr.detectChanges(); // Ensure the view is updated
+        });
       },
       error: (error) => {
         console.error('Error updating Lego piece:', error);
-        this.isUpdating = false;
+        setTimeout(() => {
+          this.isUpdating = false; // Reset the updating flag
+          this.cdr.detectChanges(); // Ensure the view is updated
+        });
       }
     });
   }

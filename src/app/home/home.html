@@ -3,14 +3,13 @@
     <div class="header">
         <div class="search-bar">
             <input type="number" placeholder="Ingresar Código" (input)="searchLegoPiece($event)" />
-            <button class="btn btn-primary" (click)="viewTable()">Buscar</button>
         </div>
         <div class="add-lego">
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addLegoModal">Agregar Lego</button>
         </div>
     </div>
     <div class="lego-table">
-        <table *ngIf="isTableVisible">
+        <table *ngIf="!isSearching">
             <thead>
                 <tr>
                     <th>Imagen</th>
@@ -68,6 +67,7 @@
                 </tr>
             </tbody>
         </table>
+        <div class="loader" *ngIf="isSearching"></div>
     </div>
     <!-- Editar Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
