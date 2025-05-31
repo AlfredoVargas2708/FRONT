@@ -2,6 +2,8 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { LegoService } from '../services/lego.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { LegoPiece } from '../interfaces/forms';
+import { formsFields } from '../forms-fields/fields';
 
 @Component({
   selector: 'app-home',
@@ -10,8 +12,8 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
   styleUrl: './home.scss'
 })
 export class Home {
-  legoPieces: any[] = [];
-  originalLegoPieces: any[] = [];
+  legoPieces: LegoPiece[] = [];
+  originalLegoPieces: LegoPiece[] = [];
   currentTaskFilter: string = '';
   currentLegoFilter: string = '';
   isSearching: boolean = false;
@@ -22,27 +24,8 @@ export class Home {
   isOpenSearchLego: boolean = false;
 
   constructor(private legoService: LegoService, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
-    this.editLegoPieceForm = this.fb.group({
-      id: [''],
-      code: [''],
-      lego: [''],
-      set: [''],
-      task: [''],
-      pedido: [''],
-      cant: [null],
-      completo: [''],
-      reemplazado: [''],
-    });
-    this.addLegoPieceForm = this.fb.group({
-      code: [''],
-      lego: [''],
-      set: [''],
-      task: [''],
-      pedido: [''],
-      cant: [null],
-      completo: [''],
-      reemplazado: [''],
-    });
+    this.editLegoPieceForm = this.fb.group(formsFields.editLegoPiece);
+    this.addLegoPieceForm = this.fb.group(formsFields.addLegoPiece);
   }
 
   searchLegoPiece(event: any) {
