@@ -8,6 +8,7 @@ import { LegoAddModal } from '../lego-add-modal/lego-add-modal';
 import { LegoEditModal } from '../lego-edit-modal/lego-edit-modal';
 import { tableHeaders } from '../forms-fields/table-fields';
 import { LegoTable } from '../lego-table/lego-table';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-home',
@@ -42,16 +43,34 @@ export class Home {
       return;
     }
 
-    this.startSearch();
+    this.isSearching = true;
 
-    try {
-      const data = await this.legoService.getLegoPieceByCode(code).toPromise();
-      this.handleSearchResults(data, code);
-    } catch (error) {
-      this.handleSearchError(error);
-    } finally {
-      this.finishSearch();
-    }
+    this.legoService.getLegoPieceByCode(code).subscribe({
+      next: (response) => {
+        console.log('Lego piece found:', response);
+        this.legoPieces = response;
+        this.originalLegoPieces = [...response];
+        setTimeout(() => {
+          this.isSearching = false;
+          this.cdr.detectChanges();
+        }, 1000);
+      },
+      error: () => {
+        Swal.fire({
+          title: 'Error!',
+          text: 'No se encontró ninguna pieza de Lego con ese código.',
+          icon: 'error',
+          timerProgressBar: true,
+          timer: 2000,
+          position: 'top-end',
+          showConfirmButton: false,
+          toast: true
+        });
+        this.isSearching = false;
+        this.legoPieces = [];
+        this.originalLegoPieces = [];
+      }
+    })
   }
 
   // Métodos auxiliares separados por responsabilidad
@@ -62,47 +81,19 @@ export class Home {
 
   private isValidCode(code: string): boolean {
     if (!code) {
-      console.error('Search code input is empty');
+      Swal.fire({
+        title: 'Error!',
+        text: 'Por favor, introduce un código de pieza válido.',
+        icon: 'error',
+        timerProgressBar: true,
+        timer: 2000,
+        position: 'top-end',
+        showConfirmButton: false,
+        toast: true
+      });
       return false;
     }
     return true;
-  }
-
-  private startSearch(): void {
-    this.isSearching = true;
-  }
-
-  private finishSearch(): void {
-    this.isSearching = false;
-    this.cdr.detectChanges();
-  }
-
-  private handleSearchResults(data: any, code: string): void {
-    if (data) {
-      this.processFoundPieces(data);
-      console.log('Lego piece found:', data);
-    } else {
-      this.legoPieces = [];
-      console.warn('No Lego piece found for code:', code);
-    }
-  }
-
-  private processFoundPieces(pieces: any[]): void {
-    this.legoPieces = pieces.map(piece => ({
-      ...piece,
-      pedido: this.translateBoolean(piece.pedido),
-      completo: this.translateBoolean(piece.completo)
-    }));
-    this.originalLegoPieces = [...this.legoPieces];
-  }
-
-  private translateBoolean(value: string): string {
-    return value !== '' ? 'Sí' : 'No';
-  }
-
-  private handleSearchError(error: any): void {
-    console.error('Error fetching Lego piece:', error);
-    this.legoPieces = [];
   }
 
   handleLegoUpdate(event: any): void {
@@ -111,8 +102,17 @@ export class Home {
     this.legoService.editLegoPieceInBBDD(event.id, event).subscribe({
       next: (response) => {
         console.log('Lego piece updated successfully:', response);
+        Swal.fire({
+          title: 'Success!',
+          text: 'Pieza de Lego actualizada correctamente.',
+          icon: 'success',
+          timerProgressBar: true,
+          timer: 2000,
+          position: 'top-end',
+          showConfirmButton: false,
+          toast: true
+        });
         setTimeout(() => {
-          this.processFoundPieces([response.data]);
           this.isUpdating = false;
           this.cdr.detectChanges();
         }, 1000);
