@@ -1,5 +1,5 @@
 <div class="lego-pieces">
-    <h2>Lego Pieces</h2>
+    <h2>Piezas de Lego</h2>
     <div class="header">
         <div class="search-bar">
             <input type="number" placeholder="Ingresar Código" (input)="searchLegoPiece($event)" />
@@ -14,10 +14,10 @@
             <thead>
                 <tr>
                     <th>Imagen</th>
-                    <th>Code</th>
+                    <th>Código</th>
                     <th>
                         <div class="lego-header">
-                            <p>Lego</p>
+                            <p>Código Set</p>
                             <div class="search-lego">
                                 <img src="https://img.icons8.com/ios/50/search-more.png" alt=""
                                     (click)="openSearchLego()">
@@ -29,7 +29,7 @@
                     <th>Set</th>
                     <th>
                         <div class="task-header">
-                            <p>Task</p>
+                            <p>Bolsa</p>
                             <div class="search-task">
                                 <img src="https://img.icons8.com/ios/50/search-more.png" alt=""
                                     (click)="openSearchTask()">
@@ -116,10 +116,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="reemplazado" class="form-label">Reemplazado</label>
-                            <select formControlName="reemplazado">
-                                <option value="Sí">Sí</option>
-                                <option value="No">No</option>
-                            </select>
+                            <input type="text" class="form-control" id="reemplazado" formControlName="reemplazado" />
                         </div>
                     </form>
                 </div>
@@ -177,10 +174,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="reemplazado" class="form-label">Reemplazado</label>
-                            <select formControlName="reemplazado">
-                                <option value="Sí">Sí</option>
-                                <option value="No">No</option>
-                            </select>
+                            <input type="text" class="form-control" id="reemplazado" formControlName="reemplazado" />
                         </div>
                     </form>
                 </div>

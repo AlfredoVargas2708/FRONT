@@ -60,7 +60,6 @@ export class Home {
             ...piece,
             pedido: piece.pedido !== '' ? 'Sí' : 'No',
             completo: piece.completo !== '' ? 'Sí' : 'No',
-            reemplazado: piece.reemplazado !== '' ? 'Sí' : 'No'
           }));
           this.originalLegoPieces = [...this.legoPieces]; // Store the original data
           console.log('Lego pieces after processing:', this.legoPieces);
@@ -102,7 +101,6 @@ export class Home {
             ...updatedLegoPiece,
             pedido: updatedLegoPiece.pedido === 'Sí' ? 'Sí' : 'No',
             completo: updatedLegoPiece.completo === 'Sí' ? 'Sí' : 'No',
-            reemplazado: updatedLegoPiece.reemplazado === 'Sí' ? 'Sí' : 'No'
           };
 
           // Forzar la actualización de la vista
