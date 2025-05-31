@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="lego-table">
-        <table *ngIf="isTableVisible && !isUpdating">
+        <table *ngIf="isTableVisible">
             <thead>
                 <tr>
                     <th>Imagen</th>
@@ -68,7 +68,6 @@
                 </tr>
             </tbody>
         </table>
-        <div class="loader" *ngIf="isUpdating && !isTableVisible"></div>
     </div>
     <!-- Editar Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

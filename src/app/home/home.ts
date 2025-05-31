@@ -88,13 +88,11 @@ export class Home {
   updateLegoPiece() {
     const updatedLegoPiece = this.editLegoPieceForm.value;
     this.isUpdating = true;
-    this.isTableVisible = false; // Hide the table while updating
 
     this.legoService.editLegoPieceInBBDD(updatedLegoPiece.id, updatedLegoPiece).subscribe({
       next: (response) => {
         console.log('Lego piece updated successfully:', response);
 
-        // Opción 1: Actualizar el elemento específico en el array
         const index = this.legoPieces.findIndex(p => p.id === updatedLegoPiece.id);
         if (index !== -1) {
           this.legoPieces[index] = {
@@ -107,20 +105,8 @@ export class Home {
           this.legoPieces = [...this.legoPieces];
         }
 
-        // Opción 2: Recargar los datos desde el servidor (más seguro)
-        // this.legoService.getLegoPieceByCode(updatedLegoPiece.code).subscribe(data => {
-        //   this.legoPieces = data.map((piece: any) => ({
-        //     ...piece,
-        //     pedido: piece.pedido ? 'Sí' : 'No',
-        //     completo: piece.completo ? 'Sí' : 'No',
-        //     reemplazado: piece.reemplazado ? 'Sí' : 'No'
-        //   }));
-        // });
-
         this.editLegoPieceForm.reset();
         this.isUpdating = false;
-        this.isTableVisible = true; // Show the table again after updating
-        this.cdr.detectChanges(); // Forzar detección de cambios
       },
       error: (error) => {
         console.error('Error updating Lego piece:', error);
