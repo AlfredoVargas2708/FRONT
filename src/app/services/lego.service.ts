@@ -22,4 +22,8 @@ export class LegoService {
   editLegoPieceInBBDD(id: number, legoPiece: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrlCloud}/${id}`, legoPiece);
   }
+
+  addLegoPieceToBBDD(legoPiece: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, legoPiece);
+  }
 }

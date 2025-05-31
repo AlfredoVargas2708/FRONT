@@ -16,6 +16,7 @@ export class Home {
   currentLegoFilter: string = '';
   isTableVisible: boolean = false;
   editLegoPieceForm: FormGroup;
+  addLegoPieceForm: FormGroup;
   isUpdating: boolean = false;
   isOpenSearchTask: boolean = false;
   isOpenSearchLego: boolean = false;
@@ -23,6 +24,16 @@ export class Home {
   constructor(private legoService: LegoService, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.editLegoPieceForm = this.fb.group({
       id: [''],
+      code: [''],
+      lego: [''],
+      set: [''],
+      task: [''],
+      pedido: [''],
+      cantidad: [null],
+      completo: [''],
+      reemplazado: [''],
+    });
+    this.addLegoPieceForm = this.fb.group({
       code: [''],
       lego: [''],
       set: [''],
@@ -158,5 +169,19 @@ export class Home {
         piece.lego?.toLowerCase().includes(this.currentLegoFilter)
       );
     }
+  }
+
+  addLegoPiece() {
+    const newLegoPiece = this.addLegoPieceForm.value;
+    this.legoService.addLegoPieceToBBDD(newLegoPiece).subscribe({
+      next: (response) => {
+        console.log('Lego piece added successfully:', response);
+        this.legoPieces.push(response);
+        this.addLegoPieceForm.reset();
+      },
+      error: (error) => {
+        console.error('Error adding Lego piece:', error);
+      }
+    });
   }
 }

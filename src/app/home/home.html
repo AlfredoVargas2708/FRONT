@@ -1,8 +1,13 @@
 <div class="lego-pieces">
     <h2>Lego Pieces</h2>
-    <div class="search-bar">
-        <input type="number" placeholder="Ingresar Código" (input)="searchLegoPiece($event)" />
-        <button class="btn btn-primary" (click)="viewTable()">Buscar</button>
+    <div class="header">
+        <div class="search-bar">
+            <input type="number" placeholder="Ingresar Código" (input)="searchLegoPiece($event)" />
+            <button class="btn btn-primary" (click)="viewTable()">Buscar</button>
+        </div>
+        <div class="add-lego">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addLegoModal">Agregar Lego</button>
+        </div>
     </div>
     <div class="lego-table">
         <table *ngIf="isTableVisible && !isUpdating">
@@ -119,9 +124,69 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                        (click)="updateLegoPiece()">Save changes</button>
+                        (click)="updateLegoPiece()">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Agregar Modal -->
+    <div class="modal fade" id="addLegoModal" tabindex="-1" aria-labelledby="addLegoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addLegoModalLabel">Agregar Lego</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="addLegoPieceForm">
+                        <div class="mb-3">
+                            <label for="code" class="form-label">Código</label>
+                            <input type="text" class="form-control" id="code" formControlName="code" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="lego" class="form-label">Lego</label>
+                            <input type="text" class="form-control" id="lego" formControlName="lego" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="set" class="form-label">Set</label>
+                            <input type="text" class="form-control" id="set" formControlName="set" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="task" class="form-label">Task</label>
+                            <input type="text" class="form-control" id="task" formControlName="task" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="cantidad" class="form-label">Cantidad</label>
+                            <input type="number" class="form-control" id="cantidad" formControlName="cantidad" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="pedido" class="form-label">Pedido</label>
+                            <select formControlName="pedido">
+                                <option value="Sí">Sí</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="completo" class="form-label">Completo</label>
+                            <select formControlName="completo">
+                                <option value="Sí">Sí</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="reemplazado" class="form-label">Reemplazado</label>
+                            <select formControlName="reemplazado">
+                                <option value="Sí">Sí</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addLegoPiece()">Agregar Pieza</button>
                 </div>
             </div>
         </div>
