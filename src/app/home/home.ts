@@ -4,16 +4,20 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { LegoPiece } from '../interfaces/forms';
 import { formsFields } from '../forms-fields/fields';
+import { LegoAddModal } from '../lego-add-modal/lego-add-modal';
+import { LegoEditModal } from '../lego-edit-modal/lego-edit-modal';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LegoAddModal, LegoEditModal],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
 export class Home {
   legoPieces: LegoPiece[] = [];
   originalLegoPieces: LegoPiece[] = [];
+  addLegoFields: any[] = Object.keys(formsFields.addLegoPiece);
+  editLegoFields: any[] = Object.keys(formsFields.editLegoPiece);
   currentTaskFilter: string = '';
   currentLegoFilter: string = '';
   isSearching: boolean = false;
@@ -28,79 +32,79 @@ export class Home {
     this.addLegoPieceForm = this.fb.group(formsFields.addLegoPiece);
   }
 
-  searchLegoPiece(event: any) {
-    const inputElement = event.target as HTMLInputElement;
-    const code = inputElement.value.trim(); // Get the value from the input element
-    if (!code) {
-      console.error('Search code input is empty');
+  async searchLegoPiece(event: Event) {
+    const code = this.getInputValue(event);
+
+    if (!this.isValidCode(code)) {
       return;
     }
-    this.isSearching = true; // Set the searching flag to true
-    this.legoService.getLegoPieceByCode(code).subscribe({
-      next: (data) => {
-        if (data) {
-          console.log('Lego piece found:', data);
-          this.legoPieces = data.map((piece: any) => ({
-            ...piece,
-            pedido: piece.pedido !== '' ? 'Sí' : 'No',
-            completo: piece.completo !== '' ? 'Sí' : 'No',
-          }));
-          this.originalLegoPieces = [...this.legoPieces]; // Store the original data
-        } else {
-          console.warn('No Lego piece found for code:', code);
-          this.legoPieces = []; // Clear the list if not found
-        }
-        setTimeout(() => {
-          this.isSearching = false; // Set the searching flag to false
-          this.cdr.detectChanges(); // Ensure the view is updated
-        });
-      },
-      error: (error) => {
-        console.error('Error fetching Lego piece:', error);
-        this.legoPieces = []; // Clear the list on error
-      }
-    })
+
+    this.startSearch();
+
+    try {
+      const data = await this.legoService.getLegoPieceByCode(code).toPromise();
+      this.handleSearchResults(data, code);
+    } catch (error) {
+      this.handleSearchError(error);
+    } finally {
+      this.finishSearch();
+    }
+  }
+
+  // Métodos auxiliares separados por responsabilidad
+  private getInputValue(event: Event): string {
+    const inputElement = event.target as HTMLInputElement;
+    return inputElement.value.trim();
+  }
+
+  private isValidCode(code: string): boolean {
+    if (!code) {
+      console.error('Search code input is empty');
+      return false;
+    }
+    return true;
+  }
+
+  private startSearch(): void {
+    this.isSearching = true;
+  }
+
+  private finishSearch(): void {
+    this.isSearching = false;
+    this.cdr.detectChanges();
+  }
+
+  private handleSearchResults(data: any, code: string): void {
+    if (data) {
+      this.processFoundPieces(data);
+      console.log('Lego piece found:', data);
+    } else {
+      this.legoPieces = [];
+      console.warn('No Lego piece found for code:', code);
+    }
+  }
+
+  private processFoundPieces(pieces: any[]): void {
+    this.legoPieces = pieces.map(piece => ({
+      ...piece,
+      pedido: this.translateBoolean(piece.pedido),
+      completo: this.translateBoolean(piece.completo)
+    }));
+    this.originalLegoPieces = [...this.legoPieces];
+  }
+
+  private translateBoolean(value: string): string {
+    return value !== '' ? 'Sí' : 'No';
+  }
+
+  private handleSearchError(error: any): void {
+    console.error('Error fetching Lego piece:', error);
+    this.legoPieces = [];
   }
 
   editLegoPiece(id: number) {
     this.editLegoPieceForm.patchValue(this.legoPieces[id]);
     console.log('Form values after patch:', this.editLegoPieceForm.value);
-  }
-
-  updateLegoPiece() {
-    const updatedLegoPiece = this.editLegoPieceForm.value;
-    this.isUpdating = true;
-
-    this.legoService.editLegoPieceInBBDD(updatedLegoPiece.id, updatedLegoPiece).subscribe({
-      next: (response) => {
-        console.log('Lego piece updated successfully:', response);
-
-        const index = this.legoPieces.findIndex(p => p.id === updatedLegoPiece.id);
-        if (index !== -1) {
-          this.legoPieces[index] = {
-            ...updatedLegoPiece,
-            pedido: updatedLegoPiece.pedido === 'Sí' ? 'Sí' : 'No',
-            completo: updatedLegoPiece.completo === 'Sí' ? 'Sí' : 'No',
-          };
-
-          // Forzar la actualización de la vista
-          this.legoPieces = [...this.legoPieces];
-        }
-
-        this.editLegoPieceForm.reset();
-        setTimeout(() => {
-          this.isUpdating = false; // Reset the updating flag
-          this.cdr.detectChanges(); // Ensure the view is updated
-        });
-      },
-      error: (error) => {
-        console.error('Error updating Lego piece:', error);
-        setTimeout(() => {
-          this.isUpdating = false; // Reset the updating flag
-          this.cdr.detectChanges(); // Ensure the view is updated
-        });
-      }
-    });
   }
 
   openSearchTask() {
@@ -141,19 +145,5 @@ export class Home {
         piece.lego?.toLowerCase().includes(this.currentLegoFilter)
       );
     }
-  }
-
-  addLegoPiece() {
-    const newLegoPiece = this.addLegoPieceForm.value;
-    this.legoService.addLegoPieceToBBDD(newLegoPiece).subscribe({
-      next: (response) => {
-        console.log('Lego piece added successfully:', response);
-        this.legoPieces.push(response);
-        this.addLegoPieceForm.reset();
-      },
-      error: (error) => {
-        console.error('Error adding Lego piece:', error);
-      }
-    });
   }
 }

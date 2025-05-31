@@ -4,7 +4,7 @@ export interface LegoPiece {
   lego: string;
   set: string;
   task: string;
-  cantidad: number;
+  cant: number;
   pedido: boolean;
   completo: boolean;
   reemplazado: boolean;

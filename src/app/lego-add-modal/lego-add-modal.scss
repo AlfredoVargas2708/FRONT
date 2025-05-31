@@ -1,0 +1,16 @@
+form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 20px;
+
+    select {
+        height: 100%;
+        border-radius: 4px;
+    }
+}
+
+.mb-3 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
