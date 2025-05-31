@@ -66,11 +66,14 @@ export class Home {
           showConfirmButton: false,
           toast: true
         });
-        this.isSearching = false;
-        this.legoPieces = [];
-        this.originalLegoPieces = [];
+        setTimeout(() => {
+          this.isSearching = false;
+          this.legoPieces = [];
+          this.originalLegoPieces = [];
+          this.cdr.detectChanges();
+        }, 1000);
       }
-    })
+    });
   }
 
   // Métodos auxiliares separados por responsabilidad
