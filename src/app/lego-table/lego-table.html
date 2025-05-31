@@ -1,0 +1,47 @@
+<div class="lego-table">
+    <table *ngIf="!isSearching && !isUpdating">
+        <thead>
+            <tr>
+                <ng-container *ngFor="let header of tableHeaders">
+                    <th *ngIf="header !== 'Código Set' && header !== 'Bolsa'">{{ header }}</th>
+                    <th *ngIf="header === 'Código Set' || header === 'Bolsa'">
+                        <div class="search-header">
+                            <p>{{ header }}</p>
+                            <div class="search-input">
+                                <img src="https://img.icons8.com/ios/50/search-more.png" alt=""
+                                    (click)="header === 'Código Set' ? openSearchLego() : openSearchTask()">
+                                <input type="number" placeholder="Buscar"
+                                    [class.visible]="(header === 'Código Set' && isOpenSearchLego) || (header === 'Bolsa' && isOpenSearchTask)"
+                                    [class.hidden]="!((header === 'Código Set' && isOpenSearchLego) || (header === 'Bolsa' && isOpenSearchTask))"
+                                    (input)="searchLegoInput($event)" />
+                            </div>
+                        </div>
+                    </th>
+                </ng-container>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of legoPieces, let i = index">
+                <td class="image-cell">
+                    <img src="https://www.lego.com/cdn/product-assets/element.img.photoreal.192x192/{{ item.code }}.jpg"
+                        alt="">
+                </td>
+                <td>{{ item.code }}</td>
+                <td>{{ item.lego }}</td>
+                <td>{{ item.set }}</td>
+                <td>{{ item.task }}</td>
+                <td>{{ item.cant }}</td>
+                <td>{{ item.pedido }}</td>
+                <td>{{ item.completo }}</td>
+                <td>{{ item.reemplazado }}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        (click)="editLegoPiece(i)">
+                        Editar Lego
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="loader" *ngIf="isSearching || isUpdating"></div>
+</div>

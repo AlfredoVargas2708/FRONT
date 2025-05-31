@@ -6,10 +6,12 @@ import { LegoPiece } from '../interfaces/forms';
 import { formsFields } from '../forms-fields/fields';
 import { LegoAddModal } from '../lego-add-modal/lego-add-modal';
 import { LegoEditModal } from '../lego-edit-modal/lego-edit-modal';
+import { tableHeaders } from '../forms-fields/table-fields';
+import { LegoTable } from '../lego-table/lego-table';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, ReactiveFormsModule, LegoAddModal, LegoEditModal],
+  imports: [CommonModule, ReactiveFormsModule, LegoAddModal, LegoEditModal, LegoTable],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
@@ -18,6 +20,7 @@ export class Home {
   originalLegoPieces: LegoPiece[] = [];
   addLegoFields: any[] = Object.keys(formsFields.addLegoPiece);
   editLegoFields: any[] = Object.keys(formsFields.editLegoPiece);
+  tableHeaders: string[] = Object.values(tableHeaders);
   currentTaskFilter: string = '';
   currentLegoFilter: string = '';
   isSearching: boolean = false;
@@ -102,48 +105,21 @@ export class Home {
     this.legoPieces = [];
   }
 
-  editLegoPiece(id: number) {
-    this.editLegoPieceForm.patchValue(this.legoPieces[id]);
-    console.log('Form values after patch:', this.editLegoPieceForm.value);
-  }
-
-  openSearchTask() {
-    this.isOpenSearchTask = !this.isOpenSearchTask;
-  }
-
-  openSearchLego() {
-    this.isOpenSearchLego = !this.isOpenSearchLego;
-  }
-
-  // Modifica tus funciones de filtrado
-  searchTaskInput(event: any) {
-    const inputElement = event.target as HTMLInputElement;
-    this.currentTaskFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters();
-  }
-
-  searchLegoInput(event: any) {
-    const inputElement = event.target as HTMLInputElement;
-    this.currentLegoFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters();
-  }
-
-  // Nueva función que aplica todos los filtros
-  private applyFilters() {
-    this.legoPieces = [...this.originalLegoPieces];
-
-    // Aplicar filtro por task si existe
-    if (this.currentTaskFilter) {
-      this.legoPieces = this.legoPieces.filter(piece =>
-        piece.task?.toLowerCase().includes(this.currentTaskFilter)
-      );
-    }
-
-    // Aplicar filtro por lego si existe
-    if (this.currentLegoFilter) {
-      this.legoPieces = this.legoPieces.filter(piece =>
-        piece.lego?.toLowerCase().includes(this.currentLegoFilter)
-      );
-    }
+  handleLegoUpdate(event: any): void {
+    this.isUpdating = true;
+    console.log('Lego piece updated:', event);
+    this.legoService.editLegoPieceInBBDD(event.id, event).subscribe({
+      next: (response) => {
+        console.log('Lego piece updated successfully:', response);
+        setTimeout(() => {
+          this.processFoundPieces([response.data]);
+          this.isUpdating = false;
+          this.cdr.detectChanges();
+        }, 1000);
+      },
+      error: (error) => {
+        console.error('Error updating Lego piece:', error);
+      }
+    })
   }
 }
