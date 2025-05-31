@@ -36,7 +36,7 @@ export class Home {
     this.addLegoPieceForm = this.fb.group(formsFields.addLegoPiece);
   }
 
-  async searchLegoPiece(event: Event) {
+  async searchLegoPiece(event: any) {
     const code = this.getInputValue(event);
 
     if (!this.isValidCode(code)) {
@@ -77,9 +77,8 @@ export class Home {
   }
 
   // Métodos auxiliares separados por responsabilidad
-  private getInputValue(event: Event): string {
-    const inputElement = event.target as HTMLInputElement;
-    return inputElement.value.trim();
+  private getInputValue(event: any): string {
+    return event.target.value.trim();
   }
 
   private isValidCode(code: string): boolean {
@@ -115,13 +114,19 @@ export class Home {
           showConfirmButton: false,
           toast: true
         });
+      },
+      error: (error) => {
+        console.error('Error updating Lego piece:', error);
+      },
+      complete: () => {
+        this.legoPieces = this.legoPieces.map(piece =>
+          piece.id === event.id ? { ...piece, ...event } : piece
+        );
+        this.originalLegoPieces = [...this.legoPieces];
         setTimeout(() => {
           this.isUpdating = false;
           this.cdr.detectChanges();
         }, 1000);
-      },
-      error: (error) => {
-        console.error('Error updating Lego piece:', error);
       }
     })
   }
