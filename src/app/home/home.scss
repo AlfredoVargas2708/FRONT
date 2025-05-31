@@ -126,9 +126,11 @@
                 }
 
                 &.visible {
-                    width: 80px;
+                    width: 85px;
                     opacity: 1;
                     visibility: visible;
+                    outline: none;
+                    border: none;
                 }
             }
 

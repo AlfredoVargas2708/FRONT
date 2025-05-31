@@ -29,7 +29,7 @@ export class Home {
       set: [''],
       task: [''],
       pedido: [''],
-      cantidad: [null],
+      cant: [null],
       completo: [''],
       reemplazado: [''],
     });
@@ -39,7 +39,7 @@ export class Home {
       set: [''],
       task: [''],
       pedido: [''],
-      cantidad: [null],
+      cant: [null],
       completo: [''],
       reemplazado: [''],
     });
