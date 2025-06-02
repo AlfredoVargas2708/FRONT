@@ -13,7 +13,7 @@
                                 <input type="number" placeholder="Buscar"
                                     [class.visible]="(header === 'Código Set' && isOpenSearchLego) || (header === 'Bolsa' && isOpenSearchTask)"
                                     [class.hidden]="!((header === 'Código Set' && isOpenSearchLego) || (header === 'Bolsa' && isOpenSearchTask))"
-                                    (input)="searchLegoInput($event)" />
+                                    (input)="header === 'Código Set' ? searchLegoInput($event) : searchTaskInput($event)" />
                             </div>
                         </div>
                     </th>

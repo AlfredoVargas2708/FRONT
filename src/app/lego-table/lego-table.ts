@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { LegoService } from '../services/lego.service';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -21,6 +21,8 @@ export class LegoTable {
   currentTaskFilter: string = '';
   currentLegoFilter: string = '';
 
+  @Output() applyFilters = new EventEmitter<any>();
+
   constructor() { }
 
   openSearchTask() {
@@ -35,16 +37,26 @@ export class LegoTable {
   searchTaskInput(event: any) {
     const inputElement = event.target as HTMLInputElement;
     this.currentTaskFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters();
+    console.log('Current Task Filter:', this.currentTaskFilter);
+    this.applyFilters.emit({
+      taskFilter: this.currentTaskFilter,
+      legoFilter: this.currentLegoFilter
+    })
+    //this.applyFilters();
   }
 
   searchLegoInput(event: any) {
     const inputElement = event.target as HTMLInputElement;
     this.currentLegoFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters();
+    console.log('Current Lego Filter:', this.currentLegoFilter);
+    this.applyFilters.emit({
+      taskFilter: this.currentTaskFilter,
+      legoFilter: this.currentLegoFilter
+    })
+    //this.applyFilters();
   }
 
-  // Nueva función que aplica todos los filtros
+/*   // Nueva función que aplica todos los filtros
   private applyFilters() {
     this.legoPieces = [...this.originalLegoPieces];
 
@@ -61,7 +73,7 @@ export class LegoTable {
         piece.lego?.toLowerCase().includes(this.currentLegoFilter)
       );
     }
-  }
+  } */
 
   editLegoPiece(id: number) {
     this.editLegoPieceForm.patchValue(this.legoPieces[id]);

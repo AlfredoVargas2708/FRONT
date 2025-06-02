@@ -11,7 +11,7 @@ export class LegoService {
 
   constructor(private http: HttpClient) { }
 
-  getLegoPieces(): Observable<any> {
+  getAllLegoPieces(): Observable<any> {
     return this.http.get<any>(this.apiUrlCloud);
   }
 

@@ -10,7 +10,7 @@
     </div>
     <!-- Tabla de Piezas de Lego -->
     <app-lego-table [tableHeaders]="tableHeaders" [legoPieces]="legoPieces" [isSearching]="isSearching"
-        [editLegoPieceForm]="editLegoPieceForm" [isUpdating]="isUpdating"></app-lego-table>
+        [editLegoPieceForm]="editLegoPieceForm" [isUpdating]="isUpdating" (applyFilters)="applyFilters($event)"></app-lego-table>
     <!-- Editar Modal -->
     <app-lego-edit-modal [editLegoPieceForm]="editLegoPieceForm" [editLegoFields]="editLegoFields"
         (updateLegoPieceEvent)="handleLegoUpdate($event)"></app-lego-edit-modal>

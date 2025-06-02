@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { LegoService } from '../services/lego.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
-export class Home {
+export class Home implements OnInit {
   legoPieces: LegoPiece[] = [];
   originalLegoPieces: LegoPiece[] = [];
   addLegoFields: any[] = Object.keys(formsFields.addLegoPiece);
@@ -36,45 +36,61 @@ export class Home {
     this.addLegoPieceForm = this.fb.group(formsFields.addLegoPiece);
   }
 
-  async searchLegoPiece(event: any) {
-    const code = this.getInputValue(event);
+  ngOnInit() {
+    this.getAllLegoPieces();
+  }
 
-    if (!this.isValidCode(code)) {
-      return;
-    }
-
-    this.isSearching = true;
-
-    this.legoService.getLegoPieceByCode(code).subscribe({
+  getAllLegoPieces() {
+    this.legoService.getAllLegoPieces().subscribe({
       next: (response) => {
-        console.log('Lego piece found:', response);
+        console.log('All Lego pieces:', response);
         this.legoPieces = response;
-        this.originalLegoPieces = [...response];
-        setTimeout(() => {
-          this.isSearching = false;
-          this.cdr.detectChanges();
-        }, 1000);
       },
-      error: () => {
-        Swal.fire({
-          title: 'Error!',
-          text: 'No se encontró ninguna pieza de Lego con ese código.',
-          icon: 'error',
-          timerProgressBar: true,
-          timer: 2000,
-          position: 'top-end',
-          showConfirmButton: false,
-          toast: true
-        });
-        setTimeout(() => {
-          this.isSearching = false;
-          this.legoPieces = [];
-          this.originalLegoPieces = [];
-          this.cdr.detectChanges();
-        }, 1000);
+      error: (error) => {
+        console.error('Error fetching all Lego pieces:', error);
       }
     });
   }
+
+    searchLegoPiece(event: any) {
+      const code = this.getInputValue(event);
+
+      if (!this.isValidCode(code)) {
+        return;
+      }
+
+      this.isSearching = true;
+
+      this.legoService.getLegoPieceByCode(code).subscribe({
+        next: (response) => {
+          console.log('Lego piece found:', response);
+          this.legoPieces = response;
+          this.originalLegoPieces = [...response];
+          setTimeout(() => {
+            this.isSearching = false;
+            this.cdr.detectChanges();
+          }, 1000);
+        },
+        error: () => {
+          Swal.fire({
+            title: 'Error!',
+            text: 'No se encontró ninguna pieza de Lego con ese código.',
+            icon: 'error',
+            timerProgressBar: true,
+            timer: 2000,
+            position: 'top-end',
+            showConfirmButton: false,
+            toast: true
+          });
+          setTimeout(() => {
+            this.isSearching = false;
+            this.legoPieces = [];
+            this.originalLegoPieces = [];
+            this.cdr.detectChanges();
+          }, 1000);
+        }
+      });
+    }
 
   // Métodos auxiliares separados por responsabilidad
   private getInputValue(event: any): string {
@@ -129,5 +145,17 @@ export class Home {
         }, 1000);
       }
     })
+  }
+
+  applyFilters(filters: any) {
+    console.log('Applying filters:', filters);
+    this.currentTaskFilter = filters.taskFilter || '';
+    this.currentLegoFilter = filters.legoFilter || '';
+
+    console.log(this.legoPieces.filter(piece => {
+      const matchesLego = this.currentLegoFilter ? piece.lego.toLowerCase().includes(this.currentLegoFilter.toLowerCase()) : true;
+      const matchesTask = this.currentTaskFilter ? piece.task.toLowerCase().includes(this.currentTaskFilter.toLowerCase()) : true;
+      return matchesTask && matchesLego;
+    }))
   }
 }
