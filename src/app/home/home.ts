@@ -45,6 +45,10 @@ export class Home implements OnInit {
       next: (response) => {
         console.log('All Lego pieces:', response);
         this.legoPieces = response;
+        this.originalLegoPieces = [...response];
+        setTimeout(() => {
+          this.cdr.detectChanges();
+        }, 1000);
       },
       error: (error) => {
         console.error('Error fetching all Lego pieces:', error);
@@ -152,10 +156,24 @@ export class Home implements OnInit {
     this.currentTaskFilter = filters.taskFilter || '';
     this.currentLegoFilter = filters.legoFilter || '';
 
-    console.log(this.legoPieces.filter(piece => {
+    this.legoPieces = this.originalLegoPieces.filter(piece => {
       const matchesLego = this.currentLegoFilter ? piece.lego.toLowerCase().includes(this.currentLegoFilter.toLowerCase()) : true;
       const matchesTask = this.currentTaskFilter ? piece.task.toLowerCase().includes(this.currentTaskFilter.toLowerCase()) : true;
       return matchesTask && matchesLego;
-    }))
+    });
+
+    if(this.legoPieces.length === 0) {
+      Swal.fire({
+        title: 'No results found',
+        text: 'No se encontraron piezas de Lego que coincidan con los filtros aplicados.',
+        icon: 'info',
+        timerProgressBar: true,
+        timer: 2000,
+        position: 'top-end',
+        showConfirmButton: false,
+        toast: true
+      });
+      this.legoPieces = [...this.originalLegoPieces]; // Reset to original if no matches
+    }
   }
 }
