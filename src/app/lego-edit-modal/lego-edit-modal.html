@@ -12,7 +12,15 @@
                             <label for="{{ field }}" class="form-label">{{ field | titlecase }}</label>
                             <input type="text" class="form-control" id="{{ field }}" formControlName="{{ field }}" />
                         </div>
-                        <div class="mb-3" *ngIf="field === 'pedido' || field === 'completo'">
+                        <div class="mb-3" *ngIf="field === 'pedido'">
+                            <label for="{{ field }}" class="form-label">{{ field | titlecase }}</label>
+                            <select formControlName="{{ field }}">
+                                <option value="Sí">Sí</option>
+                                <option value="No">No</option>
+                                <option value="Por pedir">Por pedir</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" *ngIf="field === 'completo'">
                             <label for="{{ field }}" class="form-label">{{ field | titlecase }}</label>
                             <select formControlName="{{ field }}">
                                 <option value="Sí">Sí</option>
