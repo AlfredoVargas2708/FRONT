@@ -24,6 +24,7 @@ export class Home implements OnInit {
   tableHeaders: string[] = Object.values(tableHeaders);
   currentTaskFilter: string = '';
   currentLegoFilter: string = '';
+  currentPedidoFilter: string = '';
   isSearching: boolean = false;
   editLegoPieceForm: FormGroup;
   addLegoPieceForm: FormGroup;
@@ -155,11 +156,14 @@ export class Home implements OnInit {
     console.log('Applying filters:', filters);
     this.currentTaskFilter = filters.taskFilter || '';
     this.currentLegoFilter = filters.legoFilter || '';
+    this.currentPedidoFilter = filters.pedidoFilter || '';
 
     this.legoPieces = this.originalLegoPieces.filter(piece => {
       const matchesLego = this.currentLegoFilter ? piece.lego.toLowerCase().includes(this.currentLegoFilter.toLowerCase()) : true;
       const matchesTask = this.currentTaskFilter ? piece.task.toLowerCase().includes(this.currentTaskFilter.toLowerCase()) : true;
-      return matchesTask && matchesLego;
+      const matchesPedido = this.currentPedidoFilter ? piece.pedido.toLowerCase().includes(this.currentPedidoFilter.toLowerCase()) : true;
+
+      return matchesTask && matchesLego && matchesPedido;
     });
 
     if(this.legoPieces.length === 0) {

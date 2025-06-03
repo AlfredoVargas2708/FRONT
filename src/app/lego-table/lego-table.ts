@@ -18,8 +18,10 @@ export class LegoTable {
   originalLegoPieces: any[] = [];
   isOpenSearchTask: boolean = false;
   isOpenSearchLego: boolean = false;
+  isOpenSearchPedido: boolean = false;
   currentTaskFilter: string = '';
   currentLegoFilter: string = '';
+  currentPedidoFilter: string = '';
 
   @Output() applyFilters = new EventEmitter<any>();
 
@@ -33,6 +35,10 @@ export class LegoTable {
     this.isOpenSearchLego = !this.isOpenSearchLego;
   }
 
+  openSearchPedido() {
+    this.isOpenSearchPedido = !this.isOpenSearchPedido; // Alterna el estado de búsqueda de Pedido
+  }
+
   // Modifica tus funciones de filtrado
   searchTaskInput(event: any) {
     const inputElement = event.target as HTMLInputElement;
@@ -40,7 +46,8 @@ export class LegoTable {
     console.log('Current Task Filter:', this.currentTaskFilter);
     this.applyFilters.emit({
       taskFilter: this.currentTaskFilter,
-      legoFilter: this.currentLegoFilter
+      legoFilter: this.currentLegoFilter,
+      pedidoFilter: this.currentPedidoFilter
     })
     //this.applyFilters();
   }
@@ -51,29 +58,22 @@ export class LegoTable {
     console.log('Current Lego Filter:', this.currentLegoFilter);
     this.applyFilters.emit({
       taskFilter: this.currentTaskFilter,
-      legoFilter: this.currentLegoFilter
-    })
-    //this.applyFilters();
+      legoFilter: this.currentLegoFilter,
+      pedidoFilter: this.currentPedidoFilter
+    });
   }
 
-/*   // Nueva función que aplica todos los filtros
-  private applyFilters() {
-    this.legoPieces = [...this.originalLegoPieces];
+  searchPedidoInput(event: any) {
+    const inputElement = event.target as HTMLInputElement;
+    this.currentPedidoFilter = inputElement.value.trim().toLowerCase();
+    console.log('Current Pedido Filter:', this.currentPedidoFilter);
+    this.applyFilters.emit({
+      taskFilter: this.currentTaskFilter,
+      legoFilter: this.currentLegoFilter,
+      pedidoFilter: this.currentPedidoFilter
+    });
+  }
 
-    // Aplicar filtro por task si existe
-    if (this.currentTaskFilter) {
-      this.legoPieces = this.legoPieces.filter(piece =>
-        piece.task?.toLowerCase().includes(this.currentTaskFilter)
-      );
-    }
-
-    // Aplicar filtro por lego si existe
-    if (this.currentLegoFilter) {
-      this.legoPieces = this.legoPieces.filter(piece =>
-        piece.lego?.toLowerCase().includes(this.currentLegoFilter)
-      );
-    }
-  } */
 
   editLegoPiece(id: number) {
     this.editLegoPieceForm.patchValue(this.legoPieces[id]);

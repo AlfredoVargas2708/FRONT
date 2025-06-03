@@ -3,17 +3,17 @@
         <thead>
             <tr>
                 <ng-container *ngFor="let header of tableHeaders">
-                    <th *ngIf="header !== 'Código Set' && header !== 'Bolsa'">{{ header }}</th>
-                    <th *ngIf="header === 'Código Set' || header === 'Bolsa'">
+                    <th *ngIf="header !== 'Código Set' && header !== 'Bolsa' && header !== 'Pedido'">{{ header }}</th>
+                    <th *ngIf="header === 'Código Set' || header === 'Bolsa' || header === 'Pedido'">
                         <div class="search-header">
                             <p>{{ header }}</p>
                             <div class="search-input">
                                 <img src="https://img.icons8.com/ios/50/search-more.png" alt=""
-                                    (click)="header === 'Código Set' ? openSearchLego() : openSearchTask()">
-                                <input type="number" placeholder="Buscar"
-                                    [class.visible]="(header === 'Código Set' && isOpenSearchLego) || (header === 'Bolsa' && isOpenSearchTask)"
-                                    [class.hidden]="!((header === 'Código Set' && isOpenSearchLego) || (header === 'Bolsa' && isOpenSearchTask))"
-                                    (input)="header === 'Código Set' ? searchLegoInput($event) : searchTaskInput($event)" />
+                                    (click)="header === 'Código Set' ? openSearchLego() : header === 'Bolsa' ? openSearchTask() : openSearchPedido()">
+                                <input type="text" placeholder="Buscar"
+                                    [class.visible]="(header === 'Código Set' && isOpenSearchLego) || (header === 'Bolsa' && isOpenSearchTask) || (header === 'Pedido' && isOpenSearchPedido)"
+                                    [class.hidden]="!((header === 'Código Set' && isOpenSearchLego) || (header === 'Bolsa' && isOpenSearchTask) || (header === 'Pedido' && isOpenSearchPedido))"
+                                    (input)="header === 'Código Set' ? searchLegoInput($event) : header === 'Bolsa' ? searchTaskInput($event) : header === 'Pedido' ? searchPedidoInput($event) : null" />
                             </div>
                         </div>
                     </th>
