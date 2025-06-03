@@ -186,4 +186,65 @@ export class Home implements OnInit {
       this.cdr.detectChanges();
     });
   }
+
+  deleteLegoPiece(event: any) {
+    this.isUpdating = true;
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminarlo!',
+      cancelButtonText: 'No, cancelar!',
+      position: 'top-end',
+      toast: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.legoService.deleteLegoPieceFromBBDD(event.id).subscribe({
+          next: () => {
+            Swal.fire({
+              title: '¡Eliminado!',
+              text: 'La pieza de Lego ha sido eliminada.',
+              icon: 'success',
+              timerProgressBar: true,
+              timer: 2000,
+              position: 'top-end',
+              showConfirmButton: false,
+              toast: true
+            });
+            this.legoPieces = this.legoPieces.filter(piece => piece.id !== event.id);
+            this.originalLegoPieces = this.legoPieces;
+          },
+          error: (error) => {
+            console.error('Error deleting Lego piece:', error);
+            Swal.fire({
+              title: 'Error!',
+              text: 'No se pudo eliminar la pieza de Lego.',
+              icon: 'error',
+              timerProgressBar: true,
+              timer: 2000,
+              position: 'top-end',
+              showConfirmButton: false,
+              toast: true
+            });
+            setTimeout(() => {
+              this.isUpdating = false;
+              this.cdr.detectChanges();
+            });
+          },
+          complete: () => {
+            setTimeout(() => {
+              this.isUpdating = false;
+              this.cdr.detectChanges();
+            }, 1000);
+          }
+        });
+      } else {
+        setTimeout(() => {
+          this.isUpdating = false;
+          this.cdr.detectChanges();
+        });
+      }
+    });
+  }
 }

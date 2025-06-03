@@ -24,6 +24,7 @@ export class LegoTable {
   currentPedidoFilter: string = '';
 
   @Output() applyFilters = new EventEmitter<any>();
+  @Output() deleteLegoPieceEvent = new EventEmitter<any>();
 
   constructor() { }
 
@@ -43,19 +44,16 @@ export class LegoTable {
   searchTaskInput(event: any) {
     const inputElement = event.target as HTMLInputElement;
     this.currentTaskFilter = inputElement.value.trim().toLowerCase();
-    console.log('Current Task Filter:', this.currentTaskFilter);
     this.applyFilters.emit({
       taskFilter: this.currentTaskFilter,
       legoFilter: this.currentLegoFilter,
       pedidoFilter: this.currentPedidoFilter
-    })
-    //this.applyFilters();
+    });
   }
 
   searchLegoInput(event: any) {
     const inputElement = event.target as HTMLInputElement;
     this.currentLegoFilter = inputElement.value.trim().toLowerCase();
-    console.log('Current Lego Filter:', this.currentLegoFilter);
     this.applyFilters.emit({
       taskFilter: this.currentTaskFilter,
       legoFilter: this.currentLegoFilter,
@@ -66,7 +64,6 @@ export class LegoTable {
   searchPedidoInput(event: any) {
     const inputElement = event.target as HTMLInputElement;
     this.currentPedidoFilter = inputElement.value.trim().toLowerCase();
-    console.log('Current Pedido Filter:', this.currentPedidoFilter);
     this.applyFilters.emit({
       taskFilter: this.currentTaskFilter,
       legoFilter: this.currentLegoFilter,
@@ -77,6 +74,9 @@ export class LegoTable {
 
   editLegoPiece(id: number) {
     this.editLegoPieceForm.patchValue(this.legoPieces[id]);
-    console.log('Form values after patch:', this.editLegoPieceForm.value);
+  }
+
+  deleteLegoPiece(legoPiece: any) {
+    this.deleteLegoPieceEvent.emit(legoPiece);
   }
 }

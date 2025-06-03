@@ -35,10 +35,15 @@
                 <td>{{ item.completo }}</td>
                 <td>{{ item.reemplazado }}</td>
                 <td>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        (click)="editLegoPiece(i)">
-                        Editar Lego
-                    </button>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal" (click)="editLegoPiece(i)">
+                            Editar Lego
+                        </button>
+                        <button type="button" class="btn btn-danger" (click)="deleteLegoPiece(legoPieces[i])">
+                            Eliminar Lego
+                        </button>
+                    </div>
                 </td>
             </tr>
         </tbody>
