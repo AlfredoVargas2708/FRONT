@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { LegoService } from '../services/lego.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
@@ -32,6 +32,8 @@ export class Home implements OnInit {
   isOpenSearchTask: boolean = false;
   isOpenSearchLego: boolean = false;
 
+  @ViewChild('searchInput') searchInput!: ElementRef;
+
   constructor(private legoService: LegoService, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.editLegoPieceForm = this.fb.group(formsFields.editLegoPiece);
     this.addLegoPieceForm = this.fb.group(formsFields.addLegoPiece);
@@ -44,7 +46,6 @@ export class Home implements OnInit {
   getAllLegoPieces() {
     this.legoService.getAllLegoPieces().subscribe({
       next: (response) => {
-        console.log('All Lego pieces:', response);
         this.legoPieces = response;
         this.originalLegoPieces = [...response];
         setTimeout(() => {
@@ -57,45 +58,43 @@ export class Home implements OnInit {
     });
   }
 
-    searchLegoPiece(event: any) {
-      const code = this.getInputValue(event);
+  searchLegoPiece(event: any) {
+    const code = this.getInputValue(event);
 
-      if (!this.isValidCode(code)) {
-        return;
-      }
-
-      this.isSearching = true;
-
-      this.legoService.getLegoPieceByCode(code).subscribe({
-        next: (response) => {
-          console.log('Lego piece found:', response);
-          this.legoPieces = response;
-          this.originalLegoPieces = [...response];
-          setTimeout(() => {
-            this.isSearching = false;
-            this.cdr.detectChanges();
-          }, 1000);
-        },
-        error: () => {
-          Swal.fire({
-            title: 'Error!',
-            text: 'No se encontró ninguna pieza de Lego con ese código.',
-            icon: 'error',
-            timerProgressBar: true,
-            timer: 2000,
-            position: 'top-end',
-            showConfirmButton: false,
-            toast: true
-          });
-          setTimeout(() => {
-            this.isSearching = false;
-            this.legoPieces = [];
-            this.originalLegoPieces = [];
-            this.cdr.detectChanges();
-          }, 1000);
-        }
-      });
+    if (!this.isValidCode(code)) {
+      return;
     }
+
+    this.isSearching = true;
+
+    this.legoService.getLegoPieceByCode(code).subscribe({
+      next: (response) => {
+        this.legoPieces = response;
+        setTimeout(() => {
+          this.isSearching = false;
+          this.cdr.detectChanges();
+        }, 1000);
+      },
+      error: () => {
+        Swal.fire({
+          title: 'Error!',
+          text: 'No se encontró ninguna pieza de Lego con ese código.',
+          icon: 'error',
+          timerProgressBar: true,
+          timer: 2000,
+          position: 'top-end',
+          showConfirmButton: false,
+          toast: true
+        });
+        setTimeout(() => {
+          this.isSearching = false;
+          this.legoPieces = [];
+          this.originalLegoPieces = [];
+          this.cdr.detectChanges();
+        }, 1000);
+      }
+    });
+  }
 
   // Métodos auxiliares separados por responsabilidad
   private getInputValue(event: any): string {
@@ -121,10 +120,8 @@ export class Home implements OnInit {
 
   handleLegoUpdate(event: any): void {
     this.isUpdating = true;
-    console.log('Lego piece updated:', event);
     this.legoService.editLegoPieceInBBDD(event.id, event).subscribe({
       next: (response) => {
-        console.log('Lego piece updated successfully:', response);
         Swal.fire({
           title: 'Success!',
           text: 'Pieza de Lego actualizada correctamente.',
@@ -153,7 +150,6 @@ export class Home implements OnInit {
   }
 
   applyFilters(filters: any) {
-    console.log('Applying filters:', filters);
     this.currentTaskFilter = filters.taskFilter || '';
     this.currentLegoFilter = filters.legoFilter || '';
     this.currentPedidoFilter = filters.pedidoFilter || '';
@@ -166,7 +162,7 @@ export class Home implements OnInit {
       return matchesTask && matchesLego && matchesPedido;
     });
 
-    if(this.legoPieces.length === 0) {
+    if (this.legoPieces.length === 0) {
       Swal.fire({
         title: 'No results found',
         text: 'No se encontraron piezas de Lego que coincidan con los filtros aplicados.',
@@ -179,5 +175,15 @@ export class Home implements OnInit {
       });
       this.legoPieces = [...this.originalLegoPieces]; // Reset to original if no matches
     }
+  }
+
+  cancelSearch() {
+    this.isUpdating = true;
+    this.searchInput.nativeElement.value = '';
+    setTimeout(() => {
+      this.legoPieces = [...this.originalLegoPieces];
+      this.isUpdating = false;
+      this.cdr.detectChanges();
+    });
   }
 }
