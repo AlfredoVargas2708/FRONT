@@ -76,16 +76,6 @@ export class Home implements OnInit {
         }, 1000);
       },
       error: () => {
-        Swal.fire({
-          title: 'Error!',
-          text: 'No se encontró ninguna pieza de Lego con ese código.',
-          icon: 'error',
-          timerProgressBar: true,
-          timer: 2000,
-          position: 'top-end',
-          showConfirmButton: false,
-          toast: true
-        });
         setTimeout(() => {
           this.isSearching = false;
           this.legoPieces = [];
