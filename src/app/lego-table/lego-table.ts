@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
 import { LegoService } from '../services/lego.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LegoEditModal } from '../lego-edit-modal/lego-edit-modal';
 
 @Component({
   selector: 'app-lego-table',
-  imports: [CommonModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, LegoEditModal],
   templateUrl: './lego-table.html',
   styleUrl: './lego-table.scss'
 })
@@ -17,6 +19,8 @@ export class LegoTable implements AfterViewInit {
   isOpenSearchLego: boolean = false;
   isOpenSearchPedido: boolean = false;
   originalLegoPieces: any[] = [];
+  modalIsOpen = false;
+  selectedPiece: any = null;
 
   constructor(private legoService: LegoService) { }
 
@@ -45,5 +49,18 @@ export class LegoTable implements AfterViewInit {
     } else {
       this.legoPieces = [...this.originalLegoPieces];
     }
+  }
+
+  openModal(piece: any) {
+    this.modalIsOpen = true;
+    this.selectedPiece = { ...piece };
+  }
+
+  onModalClosed() {
+    this.modalIsOpen = false;
+  }
+
+  onModalConfirmed() {
+    this.modalIsOpen = false;
   }
 }

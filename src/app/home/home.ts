@@ -3,15 +3,15 @@ import { LegoService } from '../services/lego.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { LegoPiece } from '../interfaces/forms';
-import { formsFields } from '../forms-fields/fields';
 import { LegoAddModal } from '../lego-add-modal/lego-add-modal';
-import { LegoEditModal } from '../lego-edit-modal/lego-edit-modal';
 import { tableHeaders } from '../forms-fields/table-fields';
 import { LegoTable } from '../lego-table/lego-table';
 import Swal from 'sweetalert2';
+import { formsFields } from '../forms-fields/fields';
+
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, ReactiveFormsModule, LegoAddModal, LegoEditModal, LegoTable],
+  imports: [CommonModule, ReactiveFormsModule, LegoAddModal, LegoTable],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
@@ -21,7 +21,6 @@ export class Home implements OnInit {
   tableHeaders: string[] = Object.values(tableHeaders);
   isLoading: boolean = false;
 
-
   ngOnInit(): void {
     this.getAllLegoPieces();
   }
@@ -30,8 +29,7 @@ export class Home implements OnInit {
     private legoService: LegoService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef
-  ) {
-  }
+  ) {}
 
   getAllLegoPieces() {
     this.isLoading = true;

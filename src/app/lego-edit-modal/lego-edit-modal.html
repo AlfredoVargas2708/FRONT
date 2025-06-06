@@ -1,40 +1,16 @@
-<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Lego</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form [formGroup]="editLegoPieceForm">
-                    <ng-container *ngFor="let field of editLegoFields">
-                        <div class="mb-3" *ngIf="field !== 'pedido' && field !== 'completo'">
-                            <label for="{{ field }}" class="form-label">{{ field | titlecase }}</label>
-                            <input type="text" class="form-control" id="{{ field }}" formControlName="{{ field }}" />
-                        </div>
-                        <div class="mb-3" *ngIf="field === 'pedido'">
-                            <label for="{{ field }}" class="form-label">{{ field | titlecase }}</label>
-                            <select formControlName="{{ field }}">
-                                <option value="Sí">Sí</option>
-                                <option value="No">No</option>
-                                <option value="Por pedir">Por pedir</option>
-                            </select>
-                        </div>
-                        <div class="mb-3" *ngIf="field === 'completo'">
-                            <label for="{{ field }}" class="form-label">{{ field | titlecase }}</label>
-                            <select formControlName="{{ field }}">
-                                <option value="Sí">Sí</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                    </ng-container>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                    (click)="updateLegoPiece()">Guardar cambios</button>
-            </div>
+<div class="modal-overlay" *ngIf="isOpen" (click)="close()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Editar Pieza</h2>
+            <button class="close-button" (click)="close()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <ng-content>
+            </ng-content>
+        </div>
+        <div class="modal-footer" *ngIf="showFooter">
+            <button (click)="close()">Cancelar</button>
+            <button (click)="confirm()">Guardar Cambios</button>
         </div>
     </div>
-</div> -->
+</div>
