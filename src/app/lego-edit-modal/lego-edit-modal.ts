@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './lego-edit-modal.scss'
 })
 export class LegoEditModal {
-  @Input() editLegoPieceForm: any;
+/*   @Input() editLegoPieceForm: any;
   @Input() editLegoFields: any[] = [];
 
   @Output() updateLegoPieceEvent = new EventEmitter<any>();
@@ -19,5 +19,5 @@ export class LegoEditModal {
 
   updateLegoPiece() {
     this.updateLegoPieceEvent.emit(this.editLegoPieceForm.value);
-  }
+  } */
 }

@@ -14,6 +14,10 @@ export class LegoService {
     return this.http.get<any>(`${environment.apiUrl}`);
   }
 
+  getAllSetImages(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/images`);
+  }
+
   getLegoPieceByCode(code: string): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/${code}`);
   }

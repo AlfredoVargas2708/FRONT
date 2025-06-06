@@ -10,7 +10,7 @@ import { LegoService } from '../services/lego.service';
   styleUrl: './lego-add-modal.scss'
 })
 export class LegoAddModal {
-  @Input() addLegoPieceForm: any;
+/*   @Input() addLegoPieceForm: any;
   @Input() addLegoFields: string[] = [];
   @Input() legoPieces: any[] = [];
 
@@ -28,5 +28,5 @@ export class LegoAddModal {
         console.error('Error adding Lego piece:', error);
       }
     });
-  }
+  } */
 }

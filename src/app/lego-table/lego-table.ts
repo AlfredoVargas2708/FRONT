@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
 import { LegoService } from '../services/lego.service';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -9,74 +9,41 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './lego-table.html',
   styleUrl: './lego-table.scss'
 })
-export class LegoTable {
+export class LegoTable implements AfterViewInit {
   @Input() tableHeaders: string[] = [];
   @Input() legoPieces: any[] = [];
-  @Input() isSearching: boolean = false;
-  @Input() isUpdating: boolean = false;
-  @Input() editLegoPieceForm: any;
-  originalLegoPieces: any[] = [];
+  @Input() isLoading: boolean = false;
   isOpenSearchTask: boolean = false;
   isOpenSearchLego: boolean = false;
   isOpenSearchPedido: boolean = false;
-  currentTaskFilter: string = '';
-  currentLegoFilter: string = '';
-  currentPedidoFilter: string = '';
+  originalLegoPieces: any[] = [];
 
-  @Output() applyFilters = new EventEmitter<any>();
-  @Output() deleteLegoPieceEvent = new EventEmitter<any>();
+  constructor(private legoService: LegoService) { }
 
-  constructor() { }
-
-  openSearchTask() {
-    this.isOpenSearchTask = !this.isOpenSearchTask;
+  ngAfterViewInit() {
+    this.originalLegoPieces = [...this.legoPieces];
   }
 
-  openSearchLego() {
-    this.isOpenSearchLego = !this.isOpenSearchLego;
+  openSearch(category: string) {
+    if (category === 'task') {
+      this.isOpenSearchTask = !this.isOpenSearchTask;
+    } else if (category === 'lego') {
+      this.isOpenSearchLego = !this.isOpenSearchLego;
+    } else if (category === 'pedido') {
+      this.isOpenSearchPedido = !this.isOpenSearchPedido;
+    }
   }
 
-  openSearchPedido() {
-    this.isOpenSearchPedido = !this.isOpenSearchPedido; // Alterna el estado de búsqueda de Pedido
-  }
-
-  // Modifica tus funciones de filtrado
-  searchTaskInput(event: any) {
-    const inputElement = event.target as HTMLInputElement;
-    this.currentTaskFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters.emit({
-      taskFilter: this.currentTaskFilter,
-      legoFilter: this.currentLegoFilter,
-      pedidoFilter: this.currentPedidoFilter
-    });
-  }
-
-  searchLegoInput(event: any) {
-    const inputElement = event.target as HTMLInputElement;
-    this.currentLegoFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters.emit({
-      taskFilter: this.currentTaskFilter,
-      legoFilter: this.currentLegoFilter,
-      pedidoFilter: this.currentPedidoFilter
-    });
-  }
-
-  searchPedidoInput(event: any) {
-    const inputElement = event.target as HTMLInputElement;
-    this.currentPedidoFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters.emit({
-      taskFilter: this.currentTaskFilter,
-      legoFilter: this.currentLegoFilter,
-      pedidoFilter: this.currentPedidoFilter
-    });
-  }
-
-
-  editLegoPiece(id: number) {
-    this.editLegoPieceForm.patchValue(this.legoPieces[id]);
-  }
-
-  deleteLegoPiece(legoPiece: any) {
-    this.deleteLegoPieceEvent.emit(legoPiece);
+  searchPieceBy(event: any, category: string) {
+    if (event.target.value) {
+      this.legoPieces = this.originalLegoPieces.filter(piece =>
+        piece[category].toLowerCase().includes(event.target.value.toLowerCase())
+      );
+      if (this.legoPieces.length === 0) {
+        this.legoPieces = [...this.originalLegoPieces];
+      }
+    } else {
+      this.legoPieces = [...this.originalLegoPieces];
+    }
   }
 }
