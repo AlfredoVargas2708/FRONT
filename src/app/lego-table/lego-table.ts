@@ -22,6 +22,8 @@ export class LegoTable implements AfterViewInit {
   modalIsOpen = false;
   selectedPiece: any = null;
 
+  @Output() getLegoPiecesUpdated = new EventEmitter<void>();
+
   constructor(private legoService: LegoService) { }
 
   ngAfterViewInit() {
@@ -60,7 +62,16 @@ export class LegoTable implements AfterViewInit {
     this.modalIsOpen = false;
   }
 
-  onModalConfirmed() {
+  onModalConfirmed(event: any) {
     this.modalIsOpen = false;
+    this.legoService.editLegoPieceInBBDD(event.id, event).subscribe({
+      next: (response) => {
+        console.log('Response from editLegoPieceInBBDD:', response);
+        this.getLegoPiecesUpdated.emit();
+      },
+      error: (error) => {
+        console.error('Error from editLegoPieceInBBDD:', error);
+      }
+    })
   }
 }

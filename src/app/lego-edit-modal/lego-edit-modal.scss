@@ -52,3 +52,31 @@ button {
     border-radius: 4px;
     cursor: pointer;
 }
+
+form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    .form-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        label {
+            width: 100%;
+            text-align: center;
+            text-transform: capitalize;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    }
+}

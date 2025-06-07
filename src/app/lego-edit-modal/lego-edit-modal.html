@@ -6,11 +6,36 @@
         </div>
         <div class="modal-body">
             <ng-content>
+                <form [formGroup]="editLegoPieceForm">
+                    <div *ngFor="let field of editLegoFields" class="form-group">
+                        <label>{{ field }}</label>
+
+                        <!-- Input para campos normales -->
+                        <input formControlName="{{ field }}"
+                            *ngIf="field !== 'pedido' && field !== 'completo' && field !== 'reemplazado'" />
+
+                        <!-- Select para pedido -->
+                        <select formControlName="{{ field }}" *ngIf="field === 'pedido'">
+                            <option *ngFor="let opcion of pedidos" [value]="opcion.value">{{ opcion.label }}</option>
+                        </select>
+
+                        <!-- Select para completo -->
+                        <select formControlName="{{ field }}" *ngIf="field === 'completo'">
+                            <option *ngFor="let opcion of completos" [value]="opcion.value">{{ opcion.label }}</option>
+                        </select>
+
+                        <!-- Select para reemplazado -->
+                        <select formControlName="{{ field }}" *ngIf="field === 'reemplazado'">
+                            <option *ngFor="let opcion of reemplazados" [value]="opcion.value">{{ opcion.label }}
+                            </option>
+                        </select>
+                    </div>
+                </form>
             </ng-content>
         </div>
         <div class="modal-footer" *ngIf="showFooter">
-            <button (click)="close()">Cancelar</button>
-            <button (click)="confirm()">Guardar Cambios</button>
+            <button (click)="close()" class="btn btn-secondary">Cancelar</button>
+            <button (click)="confirm()" class="btn btn-primary">Guardar Cambios</button>
         </div>
     </div>
 </div>

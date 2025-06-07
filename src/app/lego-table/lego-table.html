@@ -57,5 +57,5 @@
     </div>
 
     <app-lego-edit-modal [isOpen]="modalIsOpen" (closed)="onModalClosed()"
-        (confirmed)="onModalConfirmed()" [piece]="selectedPiece"></app-lego-edit-modal>
+        (confirmed)="onModalConfirmed($event)" [piece]="selectedPiece"></app-lego-edit-modal>
 </div>

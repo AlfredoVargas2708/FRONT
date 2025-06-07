@@ -33,6 +33,8 @@ export class Home implements OnInit {
 
   getAllLegoPieces() {
     this.isLoading = true;
+    this.legoPieces = []; // Limpiar las piezas antes de cargar nuevas
+    this.originalLegoPieces = []; // Limpiar las piezas originales antes de cargar nuevas
     this.legoService.getAllLegoPieces().subscribe({
       next: async (response) => {
         this.legoPieces = response;

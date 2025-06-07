@@ -10,5 +10,5 @@
         </div>
     </div>
     <app-lego-table [tableHeaders]="tableHeaders" [legoPieces]="legoPieces"
-    [isLoading]="isLoading"></app-lego-table>
+    [isLoading]="isLoading" (getLegoPiecesUpdated)="getAllLegoPieces()"></app-lego-table>
 </div>

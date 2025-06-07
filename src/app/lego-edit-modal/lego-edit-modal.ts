@@ -21,16 +21,29 @@ export class LegoEditModal {
   editLegoPieceForm: FormGroup;
   editLegoFields: any[] = Object.keys(formsFields.editLegoPiece);
 
+  pedidos: any[] = [
+    { value: 'Si', label: 'Si' },
+    { value: 'No', label: 'No' },
+    { value: 'Por pedir', label: 'Por pedir' }
+  ];
+
+  reemplazados: any[] = [
+    { value: 'Si', label: 'Si' },
+    { value: 'No', label: 'No' }
+  ];
+
+  completos: any[] = [
+    { value: 'Si', label: 'Si' },
+    { value: 'No', label: 'No' }
+  ];
+
   constructor(private fb: FormBuilder) {
     this.editLegoPieceForm = this.fb.group(formsFields.editLegoPiece);
-    console.log('Edit Lego Piece Form Initialized:', this.editLegoPieceForm);
   }
 
   ngOnChanges() {
     if (this.piece) {
-      console.log('Received piece:', this.piece);
       this.editLegoPieceForm.patchValue(this.piece);
-      console.log('Form patched with piece data:', this.editLegoPieceForm.value);
     }
   }
 
@@ -41,7 +54,7 @@ export class LegoEditModal {
   }
 
   confirm() {
-    this.confirmed.emit();
+    this.confirmed.emit(this.editLegoPieceForm.value);
     this.close();
   }
 }
