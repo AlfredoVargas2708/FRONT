@@ -109,13 +109,16 @@ export class Home implements OnInit {
 
   onModalConfirmed(event: any) {
     this.modalAddIsOpen = false;
+    this.isLoading = true;
     this.legoService.addLegoPieceToBBDD(event).subscribe({
       next: (response) => {
         console.log('Response from addLegoPieceToBBDD:', response);
-        this.getLegoPiecesUpdated.emit();
+        this.getAllLegoPieces();
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error from addLegoPieceToBBDD:', error);
+        this.isLoading = false;
       }
     })
   }
