@@ -53,6 +53,18 @@ export class LegoTable implements AfterViewInit {
     }
   }
 
+  deleteLego(id: number) {
+    this.legoService.deleteLegoPieceFromBBDD(id).subscribe({
+      next: (response) => {
+        console.log('Response from deleteLegoPieceInBBDD:', response);
+        this.getLegoPiecesUpdated.emit();
+      },
+      error: (error) => {
+        console.error('Error from deleteLegoPieceInBBDD:', error);
+      }
+    });
+  }
+
   openModal(piece: any) {
     this.modalIsOpen = true;
     this.selectedPiece = { ...piece };
