@@ -32,11 +32,22 @@
     }
 
     .image-cell {
-        width: 100%;
-        height: 100%;
+        width: 100px;
+        height: 100px;
         display: flex;
         justify-content: center;
         align-items: center;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .image-cell.lego {
+        width: 150px;
+        height: 150px;
 
         img {
             width: 100%;
