@@ -22,6 +22,10 @@ export class LegoService {
     return this.http.get<any>(`${environment.apiUrl}/${code}`);
   }
 
+  getLegoPieceByCategory(category: string, valor: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/category/${category}/${valor}`);
+  }
+
   editLegoPieceInBBDD(id: number, legoPiece: any): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/${id}`, legoPiece);
   }

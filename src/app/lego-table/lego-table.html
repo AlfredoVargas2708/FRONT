@@ -15,7 +15,8 @@
                             <div class="search-input"
                                 [ngStyle]="{'display': (header === 'Código Set' && isOpenSearchLego) || (header === 'Bolsa' && isOpenSearchTask) || (header === 'Pedido' && isOpenSearchPedido) ? 'flex' : 'none'}">
                                 <input type="text" placeholder="Buscar"
-                                    (input)="searchPieceBy($event, header === 'Código Set' ? 'lego' : header === 'Bolsa' ? 'task' : 'pedido')" />
+                                    (input)="searchPieceBy($event, header === 'Código Set' ? 'lego' : header === 'Bolsa' ? 'task' : 'pedido')"
+                                    [value]="currentSearchCategory"/>
                             </div>
                         </div>
                     </th>

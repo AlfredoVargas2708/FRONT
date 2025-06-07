@@ -33,6 +33,16 @@ export class Home implements OnInit {
     private cdr: ChangeDetectorRef
   ) { }
 
+  getLegoPieces(event: any) {
+    const { category, value } = event;
+
+    if (category === '') {
+      this.getAllLegoPieces();
+    } else {
+      this.getAllLegoPiecesByCategory(category, value);
+    }
+  }
+
   getAllLegoPieces() {
     this.isLoading = true;
     this.legoPieces = []; // Limpiar las piezas antes de cargar nuevas
@@ -45,6 +55,23 @@ export class Home implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching all Lego pieces:', error);
+        this.isLoading = false;
+      }
+    })
+  }
+
+  getAllLegoPiecesByCategory(category: string, value: string) {
+    this.isLoading = true;
+    this.legoPieces = []; // Limpiar las piezas antes de cargar nuevas
+    this.originalLegoPieces = []; // Limpiar las piezas originales antes de cargar nuevas
+    this.legoService.getLegoPieceByCategory(category, value).subscribe({
+      next: async (response) => {
+        this.legoPieces = response;
+        this.loadSetImages();
+        this.originalLegoPieces = [...this.legoPieces]; // Guardar las piezas originales
+      },
+      error: (error) => {
+        console.error('Error fetching Lego pieces by category:', error);
         this.isLoading = false;
       }
     })

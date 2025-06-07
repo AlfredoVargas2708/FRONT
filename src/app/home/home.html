@@ -10,8 +10,8 @@
         </div>
     </div>
     <app-lego-table [tableHeaders]="tableHeaders" [legoPieces]="legoPieces" [isLoading]="isLoading"
-        (getLegoPiecesUpdated)="getAllLegoPieces()"></app-lego-table>
+        (getLegoPiecesUpdated)="getLegoPieces($event)"></app-lego-table>
 
     <app-lego-add-modal [isOpenAdd]="modalAddIsOpen" (closed)="onModalClosed()"
-    (confirmed)="onModalConfirmed($event)" (getLegoPiecesUpdated)="getAllLegoPieces()"></app-lego-add-modal>
+    (confirmed)="onModalConfirmed($event)" (getLegoPiecesUpdated)="getLegoPieces($event)"></app-lego-add-modal>
 </div>

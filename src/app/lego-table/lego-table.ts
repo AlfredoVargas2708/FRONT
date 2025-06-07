@@ -18,11 +18,13 @@ export class LegoTable implements AfterViewInit {
   isOpenSearchTask: boolean = false;
   isOpenSearchLego: boolean = false;
   isOpenSearchPedido: boolean = false;
+  currentSearchCategory: string = '';
+  currentCategory: string = '';
   originalLegoPieces: any[] = [];
   modalIsOpen = false;
   selectedPiece: any = null;
 
-  @Output() getLegoPiecesUpdated = new EventEmitter<void>();
+  @Output() getLegoPiecesUpdated = new EventEmitter<any>();
 
   constructor(private legoService: LegoService) { }
 
@@ -45,6 +47,8 @@ export class LegoTable implements AfterViewInit {
       this.legoPieces = this.originalLegoPieces.filter(piece =>
         piece[category].toLowerCase().includes(event.target.value.toLowerCase())
       );
+      this.currentSearchCategory = event.target.value;
+      this.currentCategory = category;
       if (this.legoPieces.length === 0) {
         this.legoPieces = [...this.originalLegoPieces];
       }
@@ -79,7 +83,7 @@ export class LegoTable implements AfterViewInit {
     this.legoService.editLegoPieceInBBDD(event.id, event).subscribe({
       next: (response) => {
         console.log('Response from editLegoPieceInBBDD:', response);
-        this.getLegoPiecesUpdated.emit();
+        this.getLegoPiecesUpdated.emit({ category: this.currentCategory, value: this.currentSearchCategory });
       },
       error: (error) => {
         console.error('Error from editLegoPieceInBBDD:', error);
