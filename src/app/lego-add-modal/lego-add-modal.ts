@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LegoService } from '../services/lego.service';
+import { formsFields } from '../forms-fields/fields';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-lego-add-modal',
@@ -10,23 +12,42 @@ import { LegoService } from '../services/lego.service';
   styleUrl: './lego-add-modal.scss'
 })
 export class LegoAddModal {
-/*   @Input() addLegoPieceForm: any;
-  @Input() addLegoFields: string[] = [];
-  @Input() legoPieces: any[] = [];
+  @Input() isOpenAdd = false;
+  @Input() showFooter = true;
 
-  constructor(private legoService: LegoService) {}
+  @Output() closed = new EventEmitter<void>();
+  @Output() confirmed = new EventEmitter<void>();
 
-  addLegoPiece() {
-    const newLegoPiece = this.addLegoPieceForm.value;
-    this.legoService.addLegoPieceToBBDD(newLegoPiece).subscribe({
-      next: (response) => {
-        console.log('Lego piece added successfully:', response);
-        this.legoPieces.push(response);
-        this.addLegoPieceForm.reset();
-      },
-      error: (error) => {
-        console.error('Error adding Lego piece:', error);
-      }
-    });
-  } */
+  addLegoPieceForm: FormGroup;
+  addLegoFields: any[] = Object.keys(formsFields.addLegoPiece);
+
+  pedidos: any[] = [
+    { value: 'Si', label: 'Si' },
+    { value: 'No', label: 'No' },
+    { value: 'Por pedir', label: 'Por pedir' }
+  ];
+
+  reemplazados: any[] = [
+    { value: 'Si', label: 'Si' },
+    { value: 'No', label: 'No' }
+  ];
+
+  completos: any[] = [
+    { value: 'Si', label: 'Si' },
+    { value: 'No', label: 'No' }
+  ];
+
+  constructor(private fb: FormBuilder) {
+    this.addLegoPieceForm = this.fb.group(formsFields.addLegoPiece);
+  }
+
+  close() {
+    this.isOpenAdd = false;
+    this.closed.emit();
+  }
+
+  confirm() {
+    this.confirmed.emit(this.addLegoPieceForm.value);
+    this.close();
+  }
 }

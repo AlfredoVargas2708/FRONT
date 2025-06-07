@@ -1,32 +1,37 @@
-<!-- <div class="modal fade" id="addLegoModal" tabindex="-1" aria-labelledby="addLegoModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="addLegoModalLabel">Agregar Lego</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+<div class="modal-overlay" *ngIf="isOpenAdd" (click)="close()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Editar Pieza</h2>
+            <button class="close-button" (click)="close()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <ng-content>
                 <form [formGroup]="addLegoPieceForm">
-                    <ng-container *ngFor="let field of addLegoFields">
-                        <div class="mb-3" *ngIf="field !== 'pedido' && field !== 'completo'">
-                            <label for="{{ field }}" class="form-label">{{ field | titlecase }}</label>
-                            <input type="text" class="form-control" id="{{ field }}" formControlName="{{ field }}" />
-                        </div>
-                        <div class="mb-3" *ngIf="field === 'pedido' || field === 'completo'">
-                            <label for="{{ field }}" class="form-label">{{ field | titlecase }}</label>
-                            <select formControlName="{{ field }}">
-                                <option value="Sí">Sí</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                    </ng-container>
+                    <div *ngFor="let field of addLegoFields" class="form-group">
+                        <label>{{ field }}</label>
+
+                        <input formControlName="{{ field }}"
+                            *ngIf="field !== 'pedido' && field !== 'completo' && field !== 'reemplazado'" />
+
+                        <select formControlName="{{ field }}" *ngIf="field === 'pedido'">
+                            <option *ngFor="let opcion of pedidos" [value]="opcion.value">{{ opcion.label }}</option>
+                        </select>
+
+                        <select formControlName="{{ field }}" *ngIf="field === 'completo'">
+                            <option *ngFor="let opcion of completos" [value]="opcion.value">{{ opcion.label }}</option>
+                        </select>
+
+                        <select formControlName="{{ field }}" *ngIf="field === 'reemplazado'">
+                            <option *ngFor="let opcion of reemplazados" [value]="opcion.value">{{ opcion.label }}
+                            </option>
+                        </select>
+                    </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addLegoPiece()">Agregar
-                    Pieza</button>
-            </div>
+            </ng-content>
+        </div>
+        <div class="modal-footer" *ngIf="showFooter">
+            <button (click)="close()" class="btn btn-secondary">Cancelar</button>
+            <button (click)="confirm()" class="btn btn-primary">Guardar Cambios</button>
         </div>
     </div>
-</div> -->
+</div>

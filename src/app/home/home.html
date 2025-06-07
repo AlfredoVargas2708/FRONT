@@ -6,9 +6,12 @@
             <img src="https://img.icons8.com/ios/50/cancel.png" alt="Cancelar búsqueda" />
         </div>
         <div class="add-lego">
-            <button class="btn btn-success">Agregar Nueva Pieza</button>
+            <button class="btn btn-success" (click)="openAddModal()">Agregar Nueva Pieza</button>
         </div>
     </div>
-    <app-lego-table [tableHeaders]="tableHeaders" [legoPieces]="legoPieces"
-    [isLoading]="isLoading" (getLegoPiecesUpdated)="getAllLegoPieces()"></app-lego-table>
+    <app-lego-table [tableHeaders]="tableHeaders" [legoPieces]="legoPieces" [isLoading]="isLoading"
+        (getLegoPiecesUpdated)="getAllLegoPieces()"></app-lego-table>
+
+    <app-lego-add-modal [isOpenAdd]="modalAddIsOpen" (closed)="onModalClosed()"
+    (confirmed)="onModalConfirmed($event)" (getLegoPiecesUpdated)="getAllLegoPieces()"></app-lego-add-modal>
 </div>

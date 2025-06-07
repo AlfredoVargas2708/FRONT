@@ -1,17 +1,16 @@
-import { Component, ChangeDetectorRef, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, Output, EventEmitter} from '@angular/core';
 import { LegoService } from '../services/lego.service';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { LegoPiece } from '../interfaces/forms';
-import { LegoAddModal } from '../lego-add-modal/lego-add-modal';
 import { tableHeaders } from '../forms-fields/table-fields';
 import { LegoTable } from '../lego-table/lego-table';
 import Swal from 'sweetalert2';
-import { formsFields } from '../forms-fields/fields';
+import { LegoAddModal } from '../lego-add-modal/lego-add-modal';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, ReactiveFormsModule, LegoAddModal, LegoTable],
+  imports: [CommonModule, ReactiveFormsModule, LegoTable, LegoAddModal],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
@@ -20,6 +19,9 @@ export class Home implements OnInit {
   originalLegoPieces: LegoPiece[] = [];
   tableHeaders: string[] = Object.values(tableHeaders);
   isLoading: boolean = false;
+  modalAddIsOpen: boolean = false;
+
+  @Output() getLegoPiecesUpdated = new EventEmitter<void>();
 
   ngOnInit(): void {
     this.getAllLegoPieces();
@@ -29,7 +31,7 @@ export class Home implements OnInit {
     private legoService: LegoService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   getAllLegoPieces() {
     this.isLoading = true;
@@ -93,6 +95,27 @@ export class Home implements OnInit {
           toast: true
         })
         this.legoPieces = this.originalLegoPieces; // Restaura las piezas originales si hay un error
+      }
+    })
+  }
+
+  openAddModal() {
+    this.modalAddIsOpen = true;
+  }
+
+  onModalClosed() {
+    this.modalAddIsOpen = false;
+  }
+
+  onModalConfirmed(event: any) {
+    this.modalAddIsOpen = false;
+    this.legoService.addLegoPieceToBBDD(event).subscribe({
+      next: (response) => {
+        console.log('Response from addLegoPieceToBBDD:', response);
+        this.getLegoPiecesUpdated.emit();
+      },
+      error: (error) => {
+        console.error('Error from addLegoPieceToBBDD:', error);
       }
     })
   }
